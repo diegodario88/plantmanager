@@ -1,6 +1,20 @@
 import React from 'react';
-import { Welcome } from './src/pages/welcome';
+import AppLoading from 'expo-app-loading';
+import Routes from './src/routes/index';
+
+import {
+  useFonts,
+  Jost_400Regular,
+  Jost_600SemiBold,
+} from '@expo-google-fonts/jost';
 
 export default function App(): JSX.Element {
-  return <Welcome />;
+  const [fontsLoaded] = useFonts({ Jost_400Regular, Jost_600SemiBold });
+  const loadingFonts = typeof fontsLoaded === 'undefined' || !fontsLoaded;
+
+  if (loadingFonts) {
+    return <AppLoading />;
+  }
+
+  return <Routes />;
 }
