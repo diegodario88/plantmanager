@@ -4,8 +4,32 @@ import colors from '../../styles/colors';
 import fonts from '../../styles/fonts';
 import EnvironmentButton from '../components/environment-button';
 import Header from '../components/header';
+import api from '../services/api';
+
+interface Environments {
+  key: string;
+  title: string;
+}
 
 export function PlantSelect(): JSX.Element {
+  const [environments, setEnvironments] = React.useState<Environments[]>([]);
+
+  React.useEffect(() => {
+    async function fetchEnvironment(): Promise<void> {
+      const { data } = await api.get('plants_environments');
+      setEnvironments([
+        {
+          key: 'all',
+          title: 'Todos',
+        },
+        ...data,
+      ]);
+    }
+
+    // eslint-disable-next-line no-void
+    void fetchEnvironment();
+  }, []);
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -15,8 +39,8 @@ export function PlantSelect(): JSX.Element {
       </View>
       <View>
         <FlatList
-          data={[1, 2, 3, 4, 5, 6]}
-          renderItem={() => <EnvironmentButton title="Sala" />}
+          data={environments}
+          renderItem={({ item }) => <EnvironmentButton title={item?.title} />}
           horizontal
           showsHorizontalScrollIndicator={false}
           contentContainerStyle={styles.environmentList}
