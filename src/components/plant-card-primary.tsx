@@ -1,26 +1,27 @@
 import React from 'react';
 import { View, StyleSheet, Text } from 'react-native';
 import { RectButton, RectButtonProps } from 'react-native-gesture-handler';
+import { SvgFromUri } from 'react-native-svg';
 import colors from '../../styles/colors';
 import fonts from '../../styles/fonts';
 
-interface EnvironmentButtonProps extends RectButtonProps {
-  title: string;
+interface PlantCardPrimaryProps extends RectButtonProps {
+  data: {
+    name: string;
+    photo: string;
+  };
   active?: boolean;
 }
 
-export function EnvironmentButton({
-  title,
-  active = false,
+export function PlantCardPrimary({
+  data,
   ...rest
-}: EnvironmentButtonProps): JSX.Element {
+}: PlantCardPrimaryProps): JSX.Element {
   return (
-    <RectButton
-      style={[styles.container, active && styles.containerActive]}
-      {...rest}
-    >
+    <RectButton style={[styles.container]} {...rest}>
+      <SvgFromUri uri={data.photo} width={70} height={70} />
       <View>
-        <Text style={[styles.text, active && styles.textActive]}>{title}</Text>
+        <Text style={[styles.text]}>{data.name}</Text>
       </View>
     </RectButton>
   );
@@ -28,21 +29,22 @@ export function EnvironmentButton({
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
+    maxWidth: '45%',
     backgroundColor: colors.shape,
-    height: 40,
-    width: 76,
-    justifyContent: 'center',
+    borderRadius: 20,
+    paddingVertical: 10,
     alignItems: 'center',
-    borderRadius: 12,
-    marginHorizontal: 5,
+    margin: 10,
   },
   containerActive: {
     backgroundColor: colors.green_light,
   },
   text: {
     fontSize: 17,
-    color: colors.heading,
-    fontFamily: fonts.text,
+    color: colors.green_dark,
+    fontFamily: fonts.heading,
+    marginVertical: 16,
   },
   textActive: {
     fontFamily: fonts.heading,
@@ -50,4 +52,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default EnvironmentButton;
+export default PlantCardPrimary;
